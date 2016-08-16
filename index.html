@@ -56,8 +56,8 @@
 		<h2>Regner ut din snittkarakter</h2>
 		<p>Dra lenken nedenfor inn i dine bokmerker eller favoritter. 
 		</br> Naviger til 
-		<a href="https://fsweb.no/studentweb/resultater.jsf">StudWeb og Resultater</a> 
-		og trykk pa bokmerket.</p>
+		<a href="https://fsweb.no/studentweb/resultater.jsf">StudWeb og Resultater</a>, 
+		velg "Bare gyldige resultater" og trykk pa bokmerket.</p>
 		<div class="bookmark">
 			<a href="javascript:(
 				function(){
@@ -115,11 +115,7 @@
 						mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n'); 
 					}
 
-					var detailsString = '\n';
-					for (key in scoreDictionary) {
-						detailsString += ('\t' + key + '  -  ' + scoreDictionary[key] + '\n');
-					}
-					detailsString += ('\n \t Totalt: ' + totalScore + '\n \t Antall: ' + numberOfScores);
+					detailsString = ('\n \t Totalt: ' + totalScore + '\n \t Antall: ' + numberOfScores);
 
 					var alertString = (
 						'Ditt snitt er: \n\t' + averageScore + 
