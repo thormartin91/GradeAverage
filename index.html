@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Raleway:100'>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+		<style>
+		body {
+			font-family: 'Raleway', sans-serif;
+			text-align: center;
+		}
+		h1 {
+			font-weight: 100;
+			font-size: 70px;
+			padding-top: 70px;
+			margin-bottom: 0px;
+		}
+		h2 {
+			font-weight: 100;
+			font-size: 20px;
+		}
+		a {
+			color: black;
+			text-decoration: none;
+			font-style: italic;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+		.bookmark {
+			margin-top: 100px;
+			font-size: 25px;
+		}
+		.footer {
+			position: absolute;
+			bottom: 100px;
+			width: 100%;
+			text-align: center;
+		}
+		.footer i {
+			margin: 5px;
+			color: #59626d;
+		}
+		.footer i:hover {
+			color: #222224;
+		}
+		@media (max-height: 700px) {
+			.footer {
+				position: static;
+				margin-top: 100px;
+			}
+		}
+	</style>
+	</head>
+	<body>
+		<h1>GradeAverage</h1>
+		<h2>Regner ut din snittkarakter</h2>
+		<p>Dra lenken nedenfor inn i dine bokmerker eller favoritter. 
+		</br> Naviger til 
+		<a href="https://fsweb.no/studentweb/resultater.jsf">StudWeb og Resultater</a> 
+		og trykk pa bokmerket.</p>
+		<div class="bookmark">
+			<a href="javascript:(
+				function(){
+					var MAPPING = {
+						'A': 5,
+						'B': 4,
+						'C': 3,
+						'D': 2,
+						'E': 1,
+					};
+					var REVERSE_MAPPING = {
+						5: 'A',
+						4: 'B',
+						3: 'C',
+						2: 'D',
+						1: 'E',
+						0: 'F',
+					};
+					var scoreDictionary = {};
+					var selectedTable = document.getElementById('resultatlisteForm:HeleResultater:resultaterPanel');
+
+					for (i = 1; i < selectedTable.rows.length -1; i++) {
+						var selectedCourse = selectedTable.rows[i].cells[1].getElementsByClassName('column-info')[0].getElementsByClassName('infoLinje')[0].innerHTML;
+
+						var selectedScore = selectedTable.rows[i].cells[5].getElementsByClassName('infoLinje')[0].getElementsByTagName('span')[0].innerHTML;
+
+						(scoreDictionary[selectedCourse] = scoreDictionary[selectedCourse] || []).push(selectedScore);
+					}
+					delete scoreDictionary[''];
+
+					for (var key in scoreDictionary) {
+						if (scoreDictionary[key].length > 1) {
+							for (index in scoreDictionary[key]) {
+								if (scoreDictionary[key][index].length > 1) {
+									scoreDictionary[key][index] = 0;
+								} else {
+									scoreDictionary[key][index] = MAPPING[scoreDictionary[key][index]];
+								}
+							}
+							scoreDictionary[key] = Math.max.apply(Math, scoreDictionary[key]);
+						} else {
+							scoreDictionary[key] = MAPPING[scoreDictionary[key][0]];
+						}
+					}
+					var numberOfScores = Object.keys(scoreDictionary).length;
+
+					var totalScore = 0;
+					for (var key in scoreDictionary) {
+						totalScore += scoreDictionary[key];
+					}
+					var averageScore = (totalScore/numberOfScores);
+
+					var mappingString = '\n';
+					for (key in MAPPING) {
+						mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n'); 
+					}
+
+					var detailsString = '\n';
+					for (key in scoreDictionary) {
+						detailsString += ('\t' + key + '  -  ' + scoreDictionary[key] + '\n');
+					}
+					detailsString += ('\n \t Totalt: ' + totalScore + '\n \t Antall: ' + numberOfScores);
+
+					var alertString = (
+						'Ditt snitt er: \n\t' + averageScore + 
+						' ~ ' + REVERSE_MAPPING[averageScore.toFixed()] + 
+						'\n\n' + 'Hvor: ' + mappingString + 
+						'\n' + 'Detaljer:' + detailsString
+					);
+
+					alert(alertString);
+				})
+				();">GradeAverage</a>
+		</div>
+		<div class="footer">
+			<a href="https://github.com/thormartin91/GradeAverage" target="blank">
+				<i class="fa fa-github fa-2x"></i>
+			</a>
+			<a href="https://twitter.com/thormartin91" target="blank">
+				<i class="fa fa-twitter fa-2x"></i>
+			</a>
+			<a href="mailto:info@thormart.in?subject=[GradeAverage]">
+				<i class="fa fa-envelope fa-2x"></i>
+			</a>
+		</div>
+	</body>
+</html>
