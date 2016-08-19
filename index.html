@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="UTF-8">
 		<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Raleway:100'>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
 		<style>
@@ -35,6 +36,8 @@
 			bottom: 100px;
 			width: 100%;
 			text-align: center;
+			font-style: italic;
+			color: #59626d;
 		}
 		.footer i {
 			margin: 5px;
@@ -43,7 +46,7 @@
 		.footer i:hover {
 			color: #222224;
 		}
-		@media (max-height: 700px) {
+		@media (max-height: 715px) {
 			.footer {
 				position: static;
 				margin-top: 100px;
@@ -55,9 +58,7 @@
 		<h1>GradeAverage</h1>
 		<h2>Regner ut din snittkarakter</h2>
 		<p>Dra lenken nedenfor inn i dine bokmerker eller favoritter. 
-		</br> Naviger til 
-		<a href="https://fsweb.no/studentweb/resultater.jsf">StudWeb og Resultater</a>, 
-		velg "Bare gyldige resultater" og trykk pa bokmerket.</p>
+		</br>Logg inn på <a href="https://fsweb.no/studentweb/resultater.jsf">StudWeb</a> og trykk pa bokmerket.</p>
 		<div class="bookmark">
 			<a href="javascript:(
 				function(){
@@ -157,6 +158,7 @@
 			<a href="mailto:info@thormart.in?subject=[GradeAverage]">
 				<i class="fa fa-envelope fa-2x"></i>
 			</a>
+			<p>Funnet en feil? Rapporter den på epost eller GitHub</p>
 		</div>
 	</body>
 </html>
