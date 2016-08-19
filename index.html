@@ -88,19 +88,21 @@
 					}
 					delete scoreDictionary[''];
 
+					loop1:
 					for (var key in scoreDictionary) {
-						if (scoreDictionary[key].length > 1) {
-							for (index in scoreDictionary[key]) {
-								if (scoreDictionary[key][index].length > 1) {
-									scoreDictionary[key][index] = 0;
-								} else {
-									scoreDictionary[key][index] = MAPPING[scoreDictionary[key][index]];
-								}
+						loop2:
+						for (index in scoreDictionary[key]) {
+							if (scoreDictionary[key][index] == 'Bestått') {
+								delete scoreDictionary[key];
+								continue loop1;
 							}
-							scoreDictionary[key] = Math.max.apply(Math, scoreDictionary[key]);
-						} else {
-							scoreDictionary[key] = MAPPING[scoreDictionary[key][0]];
+							if (scoreDictionary[key][index].length == 1) {
+								scoreDictionary[key][index] = MAPPING[scoreDictionary[key][index]];
+							} else {
+								scoreDictionary[key][index] = 0;
+							}
 						}
+						scoreDictionary[key] = Math.max.apply(Math, scoreDictionary[key]);
 					}
 					var numberOfScores = Object.keys(scoreDictionary).length;
 
