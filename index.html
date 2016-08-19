@@ -61,72 +61,89 @@
 		<div class="bookmark">
 			<a href="javascript:(
 				function(){
-					var MAPPING = {
-						'A': 5,
-						'B': 4,
-						'C': 3,
-						'D': 2,
-						'E': 1,
-					};
-					var REVERSE_MAPPING = {
-						5: 'A',
-						4: 'B',
-						3: 'C',
-						2: 'D',
-						1: 'E',
-						0: 'F',
-					};
-					var scoreDictionary = {};
-					var selectedTable = document.getElementById('resultatlisteForm:HeleResultater:resultaterPanel');
-
-					for (i = 1; i < selectedTable.rows.length -1; i++) {
-						var selectedCourse = selectedTable.rows[i].cells[1].getElementsByClassName('column-info')[0].getElementsByClassName('infoLinje')[0].innerHTML;
-
-						var selectedScore = selectedTable.rows[i].cells[5].getElementsByClassName('infoLinje')[0].getElementsByTagName('span')[0].innerHTML;
-
-						(scoreDictionary[selectedCourse] = scoreDictionary[selectedCourse] || []).push(selectedScore);
+					if (window.location.href.indexOf('fsweb.no/studentweb/resultater') == -1) {
+						window.location.href = 'https://fsweb.no/studentweb/resultater.jsf';
+						return;
 					}
-					delete scoreDictionary[''];
 
-					loop1:
-					for (var key in scoreDictionary) {
-						loop2:
-						for (index in scoreDictionary[key]) {
-							if (scoreDictionary[key][index] == 'Bestått') {
-								delete scoreDictionary[key];
-								continue loop1;
-							}
-							if (scoreDictionary[key][index].length == 1) {
-								scoreDictionary[key][index] = MAPPING[scoreDictionary[key][index]];
-							} else {
-								scoreDictionary[key][index] = 0;
-							}
+					var calculateAverage = function() {
+						var MAPPING = {
+							'A': 5,
+							'B': 4,
+							'C': 3,
+							'D': 2,
+							'E': 1,
+						};
+						var REVERSE_MAPPING = {
+							5: 'A',
+							4: 'B',
+							3: 'C',
+							2: 'D',
+							1: 'E',
+							0: 'F',
+						};
+						var scoreDictionary = {};
+						var selectedTable = document.getElementById('resultatlisteForm:HeleResultater:resultaterPanel');
+
+						for (i = 1; i < selectedTable.rows.length -1; i++) {
+							var selectedCourse = selectedTable.rows[i].cells[1].getElementsByClassName('column-info')[0].getElementsByClassName('infoLinje')[0].innerHTML;
+
+							var selectedScore = selectedTable.rows[i].cells[5].getElementsByClassName('infoLinje')[0].getElementsByTagName('span')[0].innerHTML;
+
+							(scoreDictionary[selectedCourse] = scoreDictionary[selectedCourse] || []).push(selectedScore);
 						}
-						scoreDictionary[key] = Math.max.apply(Math, scoreDictionary[key]);
+						delete scoreDictionary[''];
+
+						loop1:
+						for (var key in scoreDictionary) {
+							loop2:
+							for (index in scoreDictionary[key]) {
+								if (scoreDictionary[key][index] == 'Bestått') {
+									delete scoreDictionary[key];
+									continue loop1;
+								}
+								if (scoreDictionary[key][index].length == 1) {
+									scoreDictionary[key][index] = MAPPING[scoreDictionary[key][index]];
+								} else {
+									scoreDictionary[key][index] = 0;
+								}
+							}
+							scoreDictionary[key] = Math.max.apply(Math, scoreDictionary[key]);
+						}
+						var numberOfScores = Object.keys(scoreDictionary).length;
+
+						var totalScore = 0;
+						for (var key in scoreDictionary) {
+							totalScore += scoreDictionary[key];
+						}
+						var averageScore = (totalScore/numberOfScores);
+
+						var mappingString = '\n';
+						for (key in MAPPING) {
+							mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n');
+						}
+
+						detailsString = ('\n \t Totalt: ' + totalScore + '\n \t Antall: ' + numberOfScores);
+
+						var alertString = (
+							'Ditt snitt er: \n\t' + averageScore +
+							' ~ ' + REVERSE_MAPPING[averageScore.toFixed()] +
+							'\n\n' + 'Hvor: ' + mappingString +
+							'\n' + 'Detaljer:' + detailsString
+						);
+
+						alert(alertString);
+					};
+
+					var validResultsButton = document.querySelector('input[value=kunGyldig]');
+
+					if (validResultsButton.checked == false) {
+						validResultsButton.click(setTimeout(function() {
+							calculateAverage();
+						}, 500));
+					} else {
+						calculateAverage();
 					}
-					var numberOfScores = Object.keys(scoreDictionary).length;
-
-					var totalScore = 0;
-					for (var key in scoreDictionary) {
-						totalScore += scoreDictionary[key];
-					}
-					var averageScore = (totalScore/numberOfScores);
-
-					var mappingString = '\n';
-					for (key in MAPPING) {
-						mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n'); 
-					}
-
-					detailsString = ('\n \t Totalt: ' + totalScore + '\n \t Antall: ' + numberOfScores);
-
-					var alertString = (
-						'Ditt snitt er: \n\t' + averageScore + 
-						' ~ ' + REVERSE_MAPPING[averageScore.toFixed()] + 
-						'\n\n' + 'Hvor: ' + mappingString + 
-						'\n' + 'Detaljer:' + detailsString
-					);
-
-					alert(alertString);
 				})
 				();">GradeAverage</a>
 		</div>
