@@ -84,6 +84,7 @@
 							0: 'F',
 						};
 						var scoreDictionary = {};
+						var pointsDictionary = {};
 						var selectedTable = document.getElementById('resultatlisteForm:HeleResultater:resultaterPanel');
 
 						for (i = 1; i < selectedTable.rows.length -1; i++) {
@@ -91,9 +92,18 @@
 
 							var selectedScore = selectedTable.rows[i].cells[5].getElementsByClassName('infoLinje')[0].getElementsByTagName('span')[0].innerHTML;
 
+							var selectedPoints = selectedTable.rows[i].cells[6].getElementsByTagName('span')[1].innerHTML;
+
 							(scoreDictionary[selectedCourse] = scoreDictionary[selectedCourse] || []).push(selectedScore);
+
+							(pointsDictionary[selectedCourse] = pointsDictionary[selectedCourse] || []).push(Number(selectedPoints.replace(',', '.')));
 						}
 						delete scoreDictionary[''];
+						delete pointsDictionary[''];
+
+						for (var key in pointsDictionary) {
+							pointsDictionary[key] = Math.max.apply(Math, pointsDictionary[key]);
+						}
 
 						loop1:
 						for (var key in scoreDictionary) {
@@ -114,17 +124,20 @@
 						var numberOfScores = Object.keys(scoreDictionary).length;
 
 						var totalScore = 0;
+						var totalPoints = 0;
 						for (var key in scoreDictionary) {
-							totalScore += scoreDictionary[key];
+							totalScore += scoreDictionary[key] * pointsDictionary[key];
+							totalPoints += pointsDictionary[key];
 						}
-						var averageScore = (totalScore/numberOfScores);
+						var averageScore = (totalScore/totalPoints);
 
 						var mappingString = '\n';
 						for (key in MAPPING) {
 							mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n');
 						}
 
-						detailsString = ('\n \t Totalt: ' + totalScore + '\n \t Antall: ' + numberOfScores);
+						detailsString = ('\n \t Totalt (karakter * studiepoeng): ' + totalScore + '\n \t Antall studiepoeng: ' + totalPoints + 
+						'\n \t Antall fag: ' + numberOfScores);
 
 						var alertString = (
 							'Ditt snitt er: \n\t' + averageScore +
