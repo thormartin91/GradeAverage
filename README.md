@@ -8,5 +8,5 @@ Bookmarklet to calculate your average grade from the list of results on StudWeb.
 - ~~Handle courses with "Bestått" / "Ikke bestått"~~
 - ~~Navigate to studweb/resultater on click~~
 - ~~Check the box for "Bare gyldige resultater" before calculation~~
-- Implement course weight (studiepoeng)
+- ~~Implement course weight (studiepoeng)~~
 - Make it a browser extension
