@@ -46,7 +46,14 @@
 		.footer i:hover {
 			color: #222224;
 		}
-		@media (max-height: 715px) {
+		.footer a:hover {
+			text-decoration: none;
+		}
+		.footer .version {
+			font-size: 12px;
+			margin: 0;
+		}
+		@media (max-height: 730px) {
 			.footer {
 				position: static;
 				margin-top: 100px;
@@ -66,7 +73,7 @@
 	<body>
 		<h1>GradeAverage</h1>
 		<h2>Regner ut din snittkarakter</h2>
-		<p>Dra lenken nedenfor inn i dine bokmerker eller favoritter. 
+		<p>Dra lenken nedenfor inn i dine bokmerker eller favoritter.
 		</br>Logg inn på <a href="https://fsweb.no/studentweb/resultater.jsf">StudWeb</a> og trykk pa bokmerket.</p>
 		<div class="bookmark">
 			<a href="javascript:(
@@ -145,7 +152,7 @@
 							mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n');
 						}
 
-						detailsString = ('\n \t Totalt (karakter * studiepoeng): ' + totalScore + '\n \t Antall studiepoeng: ' + totalPoints + 
+						detailsString = ('\n \t Totalt (karakter * studiepoeng): ' + totalScore + '\n \t Antall studiepoeng: ' + totalPoints +
 						'\n \t Antall fag: ' + numberOfScores);
 
 						var alertString = (
@@ -158,15 +165,33 @@
 						alert(alertString);
 					};
 
-					var validResultsButton = document.querySelector('input[value=kunGyldig]');
+					var latestRelease = '12.11.2016';
+					var HttpClient = function() {
+						this.get = function(url, callback) {
+							var httpRequest = new XMLHttpRequest();
+							httpRequest.onreadystatechange = function() {
+								if (httpRequest.readyState == 4 && httpRequest.status == 200)
+									callback(httpRequest.responseText);
+							};
+							httpRequest.open('GET', url, true);
+							httpRequest.send(null);
+						};
+					};
+					client = new HttpClient();
+					client.get('https://gradeaverage.thormart.in/version', function(response) {
+						if (response != latestRelease) {
+							alert('Bokmerket har blitt oppdatert. \nGå til https://GradeAverage.thormart.in for å legge til nyeste versjon.');
+						}
 
-					if (validResultsButton.checked == false) {
-						validResultsButton.click(setTimeout(function() {
+						var validResultsButton = document.querySelector('input[value=kunGyldig]');
+						if (validResultsButton.checked == false) {
+							validResultsButton.click(setTimeout(function() {
+								calculateAverage();
+							}, 500));
+						} else {
 							calculateAverage();
-						}, 500));
-					} else {
-						calculateAverage();
-					}
+						}
+					});
 				})
 				();">GradeAverage</a>
 		</div>
@@ -181,6 +206,24 @@
 				<i class="fa fa-envelope fa-2x"></i>
 			</a>
 			<p>Funnet en feil? Rapporter den på epost eller GitHub</p>
+			<p class="version">Nyeste versjon: <span id="version">?</span></p>
 		</div>
 	</body>
+	<script>
+		var HttpClient = function() {
+			this.get = function(url, callback) {
+				var httpRequest = new XMLHttpRequest();
+				httpRequest.onreadystatechange = function() {
+					if (httpRequest.readyState == 4 && httpRequest.status == 200)
+						callback(httpRequest.responseText);
+				};
+				httpRequest.open('GET', url, true);
+				httpRequest.send(null);
+			};
+		};
+		client = new HttpClient();
+		client.get('https://gradeaverage.thormart.in/version', function(response) {
+			document.getElementById("version").innerHTML=response;
+		});
+	</script>
 </html>
