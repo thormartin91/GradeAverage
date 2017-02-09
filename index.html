@@ -101,6 +101,13 @@
 						};
 						var scoreDictionary = {};
 						var pointsDictionary = {};
+						var summaryDictionary = {
+							5: {'grades': 0, 'points': 0 },
+							4: {'grades': 0, 'points': 0 },
+							3: {'grades': 0, 'points': 0 },
+							2: {'grades': 0, 'points': 0 },
+							1: {'grades': 0, 'points': 0 }
+						};
 						var selectedTable = document.getElementById('resultatlisteForm:HeleResultater:resultaterPanel');
 
 						for (i = 1; i < selectedTable.rows.length -1; i++) {
@@ -136,6 +143,8 @@
 								}
 							}
 							scoreDictionary[key] = Math.max.apply(Math, scoreDictionary[key]);
+							summaryDictionary[scoreDictionary[key]]['grades'] += 1;
+							summaryDictionary[scoreDictionary[key]]['points'] += pointsDictionary[key];
 						}
 						var numberOfScores = Object.keys(scoreDictionary).length;
 
@@ -147,25 +156,24 @@
 						}
 						var averageScore = (totalScore/totalPoints);
 
-						var mappingString = '\n';
-						for (key in MAPPING) {
-							mappingString += ('\t' + key + ' = ' + MAPPING[key] + '\n');
-						}
+						detailsString = ('\n \t Antall studiepoeng: ' + totalPoints + '\n \t Antall fag: ' + numberOfScores);
 
-						detailsString = ('\n \t Totalt (karakter * studiepoeng): ' + totalScore + '\n \t Antall studiepoeng: ' + totalPoints +
-						'\n \t Antall fag: ' + numberOfScores);
+						var summaryString = '';
+						for (key of Object.keys(summaryDictionary).reverse()) {
+							summaryString += ('\n \t' + REVERSE_MAPPING[key] + ' : \t' + summaryDictionary[key]['grades'] + ' fag, \t' + summaryDictionary[key]['points'] + ' poeng');
+						}
 
 						var alertString = (
 							'Ditt snitt er: \n\t' + averageScore +
 							' ~ ' + REVERSE_MAPPING[averageScore.toFixed()] +
-							'\n\n' + 'Hvor: ' + mappingString +
-							'\n' + 'Detaljer:' + detailsString
+							'\n\n' + 'Hvor: ' + summaryString +
+							'\n\n' + 'Totalt:' + detailsString
 						);
 
 						alert(alertString);
 					};
 
-					var latestRelease = '12.11.2016';
+					var latestRelease = '09.02.2017';
 					var HttpClient = function() {
 						this.get = function(url, callback) {
 							var httpRequest = new XMLHttpRequest();
