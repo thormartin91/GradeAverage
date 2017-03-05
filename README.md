@@ -11,3 +11,4 @@ Bookmarklet to calculate your average grade from the list of results on StudWeb.
 - ~~Implement course weight (studiepoeng)~~
 - ~~Display the distribution of grades~~
 - Make it a browser extension
+- Display expected average grade ([#7](https://github.com/thormartin91/GradeAverage/issues/7))
